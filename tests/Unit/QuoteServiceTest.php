@@ -2,15 +2,20 @@
 
 namespace Tests\Unit;
 
+use App\Services\QuoteService;
+use Override;
 use PHPUnit\Framework\TestCase;
 
 class QuoteServiceTest extends TestCase
 {
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
+    private QuoteService $service;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->service = new QuoteService();
+    }    
+
     public function test_short_trip_required_at_least_5_days()
     {
         $request = [

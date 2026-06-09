@@ -35,4 +35,24 @@ class QuoteServiceTest extends TestCase
 
         $this->assertEquals(5, $result['priced_days']);
     }
+
+    public function test_age_is_calculated_based_on_start_date()
+    {
+        $request = [
+            'destination' => 'NATIONAL',
+            'start_date' => '2026-07-10',
+            'end_date' => '2026-07-19',
+            'travelers' => [
+                [
+                    'name' => 'Gabriel',
+                    'birth_date' => '2008-07-15',
+                    'addons' => [],
+                ]
+            ]
+        ];
+
+        $result = $this->service->calculate($request);
+
+        $this->assertEquals(17, $result['travelers'][0]['age']);
+    }
 }

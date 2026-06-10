@@ -14,13 +14,19 @@ Passo a passo para rodar o projeto localmente.
 
 ## Configuração
 
-### 1. Instalar dependências
+### 1. Clonar o repositório
+
+```bash
+git clone git@github.com:ebagabee/quote_engine_api.git
+```
+
+### 2. Instalar dependências
 
 ```bash
 composer install
 ```
 
-### 2. Configurar o ambiente
+### 3. Configurar o ambiente
 
 - Copie o arquivo de `.env.example` ou duplique, renomeie para `.env`.
 - Edite o `.env` com suas credenciais do PostgreSQL:
@@ -34,19 +40,19 @@ DB_USERNAME=postgres
 DB_PASSWORD=sua_senha
 ```
 
-### 3. Gerar a chave da aplicação
+### 4. Gerar a chave da aplicação
 
 ```bash
 php artisan key:generate
 ```
 
-### 4. Rodar as migrations
+### 5. Rodar as migrations
 
 ```bash
 php artisan migrate
 ```
 
-### 5. Subir o servidor
+### 6. Subir o servidor
 
 ```bash
 php artisan serve

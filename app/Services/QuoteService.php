@@ -22,10 +22,10 @@ class QuoteService
             $withAddons = $this->subtotalWithAddons($basePrice, $traveler['addons'] ?? [], $traveler['age'], $pricedDays, $traveler['name']);
 
             $traveler['subtotal'] = $withAddons['subtotal'];
+            $traveler['addons_allowed'] = $withAddons['addons_allowed'];
             $warnings = array_merge($warnings, $withAddons['warnings']);
             
             $travelers[] = $traveler;
-
             $totalGroup += $traveler['subtotal'];
         }
 
@@ -85,6 +85,7 @@ class QuoteService
         $has_baggage = false;
         $has_adventure_sports = false;
         $warnings = [];
+        $addons_allowed = [];
 
         foreach ($addons as $addon) {
             if ($addon === 'ADVENTURE_SPORTS') {
@@ -93,11 +94,14 @@ class QuoteService
 
             if ($addon === 'BAGGAGE') {
                 $has_baggage = true;
+                $addons_allowed[] = 'BAGGAGE';
             }
         }
 
         if ($has_adventure_sports && $age >= 18 && $age <= 64) {
             $current_traveler_subtotal += $current_traveler_subtotal * 0.25;
+            $addons_allowed[] = 'ADVENTURE_SPORTS';
+            
         }
 
         if ($has_adventure_sports && ($age <= 17 || $age >= 65)) {
@@ -110,7 +114,8 @@ class QuoteService
 
         return [
             'subtotal' => $current_traveler_subtotal,
-            'warnings' => $warnings
+            'warnings' => $warnings,
+            'addons_allowed' => $addons_allowed
         ];
     }
 

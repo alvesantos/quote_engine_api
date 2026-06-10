@@ -24,7 +24,7 @@ class QuoteServiceTest extends TestCase
             'end_date' => '2026-07-11',
             'travelers' => [
                 [
-                    'name' => 'Ana',
+                    'name' => 'Leo',
                     'birth_date' => '1990-01-01',
                     'addons' => [],
                 ]
@@ -139,5 +139,75 @@ class QuoteServiceTest extends TestCase
         );
 
         $this->assertEquals(200.0, $result['travelers'][0]['subtotal']);
+    }
+
+    public function test_discount_group_percentage_fewer_than_5_travelers()
+    {
+        $request = [
+            'destination' => 'NATIONAL',
+            'start_date' => '2026-07-10',
+            'end_date' => '2026-07-19',
+            'travelers' => [
+                [
+                    'name' => 'Juliano',
+                    'birth_date' => '1999-06-10',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ],
+                [
+                    'name' => 'Gabriel',
+                    'birth_date' => '2001-07-27',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ]
+            ]
+        ];
+
+        $result = $this->service->calculate($request);
+
+        $this->assertEquals(0, $result['discount_group_percentage']);
+    }
+
+    public function test_discount_group_percentage_more_than_5_travelers()
+    {
+        $request = [
+            'destination' => 'NATIONAL',
+            'start_date' => '2026-07-10',
+            'end_date' => '2026-07-19',
+            'travelers' => [
+                [
+                    'name' => 'Juliano',
+                    'birth_date' => '1999-06-10',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ],
+                [
+                    'name' => 'Gabriel',
+                    'birth_date' => '2001-07-27',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ],
+                [
+                    'name' => 'Lucas',
+                    'birth_date' => '2001-07-27',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ],
+                [
+                    'name' => 'Vinicius',
+                    'birth_date' => '2001-07-27',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ],
+                [
+                    'name' => 'Pedro',
+                    'birth_date' => '2001-07-27',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ],
+                [
+                    'name' => 'Joyce',
+                    'birth_date' => '2001-07-27',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ]
+            ]
+        ];
+
+        $result = $this->service->calculate($request);
+
+        $this->assertEquals(10, $result['discount_group_percentage']);
     }
 }

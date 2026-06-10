@@ -25,11 +25,14 @@ class QuoteService
             $travelers[] = $traveler;
         }
 
+        $discountByGroup = $this->discountByGroup($request['travelers']);
+
         return [
             'priced_days' => $pricedDays,
 
             'travelers' => $travelers,
             'warnings' => $warnings,
+            'discount_group_percentage' => $discountByGroup,
         ];
     }
 
@@ -102,5 +105,14 @@ class QuoteService
             'subtotal' => $current_traveler_subtotal,
             'warnings' => $warnings
         ];
+    }
+
+    private function discountByGroup(array $travelers)
+    {
+        if (count($travelers) <= 4) {
+            return 0;
+        }
+
+        return 10;
     }
 }

@@ -18,6 +18,7 @@ Passo a passo para rodar o projeto localmente.
 
 ```bash
 git clone git@github.com:ebagabee/quote_engine_api.git
+cd quote_engine_api
 ```
 
 ### 2. Instalar dependências

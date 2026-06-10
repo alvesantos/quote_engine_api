@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Repositories\QuoteRepositoryInterface;
 use App\Services\QuoteService;
 use Override;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +14,9 @@ class QuoteServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new QuoteService();
+        $this->service = new QuoteService(
+            $this->createMock(QuoteRepositoryInterface::class)
+        );
     }
 
     public function test_short_trip_required_at_least_5_days()

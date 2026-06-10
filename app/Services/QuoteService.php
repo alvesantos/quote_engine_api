@@ -105,7 +105,7 @@ class QuoteService
         }
 
         if ($has_adventure_sports && ($age <= 17 || $age >= 65)) {
-            $warnings[] = "ADVENTURE_SPORTS nao aplicado para $name: fora da faixa etaria permitida (18-64).";
+            $warnings[] = "Esportes de Aventura não aplicado para $name: fora da faixa etária permitida (18-64).";
         }
 
         if ($has_baggage) {

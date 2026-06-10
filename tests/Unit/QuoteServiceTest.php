@@ -134,7 +134,7 @@ class QuoteServiceTest extends TestCase
         $result = $this->service->calculate($request);
 
         $this->assertEquals(
-            "ADVENTURE_SPORTS nao aplicado para Roger Flores: fora da faixa etaria permitida (18-64).",
+            "Esportes de Aventura não aplicado para Roger Flores: fora da faixa etária permitida (18-64).",
             $result['warnings'][0]
         );
 
@@ -242,7 +242,7 @@ class QuoteServiceTest extends TestCase
         $this->assertEquals(852.5, $result['total_final']);
         
         $this->assertEquals(
-            "ADVENTURE_SPORTS nao aplicado para Joao: fora da faixa etaria permitida (18-64).",
+            "Esportes de Aventura não aplicado para Joao: fora da faixa etária permitida (18-64).",
             $result['warnings'][0]
         );
     }

@@ -2,14 +2,32 @@
 
 namespace App\Services;
 
+use App\Models\Quote;
+use App\Repositories\QuoteRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class QuoteService
 {
+    public function __construct(
+        private QuoteRepositoryInterface $repository
+    ) {}
+
+    public function calculateAndSave(array $request): Quote
+    {
+        $result = $this->calculate($request);
+        return $this->repository->save($request, $result);
+    }
+
+    public function listAll(): Collection
+    {
+        return $this->repository->all();
+    }
+
     public function calculate(array $request): array
     {
         $totalGroup = 0;
-        
+
         $pricedDays = $this->calculatePricedDays($request['start_date'], $request['end_date']);
 
         $travelers = [];
@@ -17,14 +35,14 @@ class QuoteService
 
         foreach ($request['travelers'] as $traveler) {
             $traveler['age'] = $this->calculateAgeUntilTravelDate($traveler['birth_date'], $request['start_date']);
-            
+
             $basePrice = $this->calculateBasePrice($pricedDays, $request['destination'], $traveler['age']);
             $withAddons = $this->subtotalWithAddons($basePrice, $traveler['addons'] ?? [], $traveler['age'], $pricedDays, $traveler['name']);
 
             $traveler['subtotal'] = $withAddons['subtotal'];
             $traveler['addons_allowed'] = $withAddons['addons_allowed'];
             $warnings = array_merge($warnings, $withAddons['warnings']);
-            
+
             $travelers[] = $traveler;
             $totalGroup += $traveler['subtotal'];
         }
@@ -76,7 +94,7 @@ class QuoteService
         };
 
         $base = $priced_days * $destination_multiplier;
-        
+
         return $base * $age_multiplier;
     }
 
@@ -101,7 +119,6 @@ class QuoteService
         if ($has_adventure_sports && $age >= 18 && $age <= 64) {
             $current_traveler_subtotal += $current_traveler_subtotal * 0.25;
             $addons_allowed[] = 'ADVENTURE_SPORTS';
-            
         }
 
         if ($has_adventure_sports && ($age <= 17 || $age >= 65)) {

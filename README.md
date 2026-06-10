@@ -32,6 +32,13 @@ composer install
 - Copie o arquivo de `.env.example` ou duplique, renomeie para `.env`.
 - Edite o `.env` com suas credenciais do PostgreSQL:
 
+***Crie um banco de dados localmente***
+- Em seu gerenciador de banco de dados, ou internamente no terminal postgres:
+
+```sql
+CREATE DATABASE quote_engine
+```
+
 ```dotenv
 DB_CONNECTION=pgsql
 DB_HOST=127.0.0.1

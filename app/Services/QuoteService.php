@@ -19,7 +19,7 @@ class QuoteService
             $traveler['age'] = $this->calculateAgeUntilTravelDate($traveler['birth_date'], $request['start_date']);
             
             $basePrice = $this->calculateBasePrice($pricedDays, $request['destination'], $traveler['age']);
-            $withAddons = $this->subtotalWithAddons($basePrice, $traveler['addons'], $traveler['age'], $pricedDays, $traveler['name']);
+            $withAddons = $this->subtotalWithAddons($basePrice, $traveler['addons'] ?? [], $traveler['age'], $pricedDays, $traveler['name']);
 
             $traveler['subtotal'] = $withAddons['subtotal'];
             $warnings = array_merge($warnings, $withAddons['warnings']);

@@ -6,6 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class QuoteRequest extends FormRequest
 {
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     public function rules()
     {
         return [
@@ -16,7 +21,7 @@ class QuoteRequest extends FormRequest
 
             'travelers.*.name' => 'required|string',
             'travelers.*.birth_date' => 'required|date',
-            'travelers.*.addons' => 'required|array',
+            'travelers.*.addons' => 'nullable|array',
         ];
     }
 }

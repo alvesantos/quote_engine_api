@@ -14,7 +14,7 @@ class QuoteServiceTest extends TestCase
     {
         parent::setUp();
         $this->service = new QuoteService();
-    }    
+    }
 
     public function test_short_trip_required_at_least_5_days()
     {
@@ -112,6 +112,31 @@ class QuoteServiceTest extends TestCase
         ];
 
         $result = $this->service->calculate($request);
+
+        $this->assertEquals(200.0, $result['travelers'][0]['subtotal']);
+    }
+
+    public function test_adventure_sports_denied_with_warning()
+    {
+        $request = [
+            'destination' => 'NATIONAL',
+            'start_date' => '2026-07-10',
+            'end_date' => '2026-07-19',
+            'travelers' => [
+                [
+                    'name' => 'Roger Flores',
+                    'birth_date' => '1950-06-10',
+                    'addons' => ['ADVENTURE_SPORTS'],
+                ]
+            ]
+        ];
+
+        $result = $this->service->calculate($request);
+
+        $this->assertEquals(
+            "ADVENTURE_SPORTS nao aplicado para Roger Flores: fora da faixa etaria permitida (18-64).",
+            $result['warnings'][0]
+        );
 
         $this->assertEquals(200.0, $result['travelers'][0]['subtotal']);
     }

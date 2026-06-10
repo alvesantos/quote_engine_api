@@ -8,6 +8,8 @@ class QuoteService
 {
     public function calculate(array $request): array
     {
+        $totalGroup = 0;
+        
         $pricedDays = $this->calculatePricedDays($request['start_date'], $request['end_date']);
 
         $travelers = [];
@@ -23,9 +25,13 @@ class QuoteService
             $warnings = array_merge($warnings, $withAddons['warnings']);
             
             $travelers[] = $traveler;
+
+            $totalGroup += $traveler['subtotal'];
         }
 
         $discountByGroup = $this->discountByGroup($request['travelers']);
+
+        $total_final = round($totalGroup - ($totalGroup * $discountByGroup / 100), 2);
 
         return [
             'priced_days' => $pricedDays,
@@ -33,6 +39,7 @@ class QuoteService
             'travelers' => $travelers,
             'warnings' => $warnings,
             'discount_group_percentage' => $discountByGroup,
+            'total_final' => $total_final,
         ];
     }
 

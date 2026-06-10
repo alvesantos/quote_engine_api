@@ -210,4 +210,40 @@ class QuoteServiceTest extends TestCase
 
         $this->assertEquals(10, $result['discount_group_percentage']);
     }
+
+    public function test_complete_scenario_with_multiple_travelers_and_addons()
+    {
+        $request = [
+            'destination' => 'EUROPE',
+            'start_date' => '2026-07-10',
+            'end_date' => '2026-07-20',
+            'travelers' => [
+                [
+                    'name' => 'Ana',
+                    'birth_date' => '1990-03-15',
+                    'addons' => ['BAGGAGE', 'ADVENTURE_SPORTS'],
+                ],
+                [
+                    'name' => 'Joao',
+                    'birth_date' => '1948-11-02',
+                    'addons' => ['ADVENTURE_SPORTS', 'BAGGAGE'],
+                ]
+            ]
+        ];
+
+        $result = $this->service->calculate($request);
+
+        $this->assertEquals(11, $result['priced_days']);
+        
+        $this->assertEquals(335.5, $result['travelers'][0]['subtotal']);
+        
+        $this->assertEquals(517.0, $result['travelers'][1]['subtotal']);
+        
+        $this->assertEquals(852.5, $result['total_final']);
+        
+        $this->assertEquals(
+            "ADVENTURE_SPORTS nao aplicado para Joao: fora da faixa etaria permitida (18-64).",
+            $result['warnings'][0]
+        );
+    }
 }

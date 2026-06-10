@@ -64,7 +64,7 @@ class QuoteService
     {
         $age_multiplier = match (true) {
             $age <= 17 => 0.5,
-            $age <= 65 => 1.0,
+            $age <= 64 => 1.0,
             default    => 2.0,
         };
 
